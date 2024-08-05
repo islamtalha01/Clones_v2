@@ -51,7 +51,7 @@ export default function NavBar({ toggleSidebar }) {
       className="bg-[#1C1C24] h-[80px] border-b border-[#292932] w-full flex justify-between items-center px-4"
     >
       {/* Ensure router pathname check is within component scope */}
-      {pathname !== "/" && (
+      {pathname !== "/" && pathname!=='/login' && (
         <button
           className="text-white lg:hidden"
           onClick={toggleSidebar}

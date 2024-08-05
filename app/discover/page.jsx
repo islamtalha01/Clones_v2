@@ -46,7 +46,7 @@ const cardsData = [
 const CardComponent = ({ card }) => {
   // const [isRoomFull, setIsRoomFull] = useState(false);
 
-  const { isRoomFull } = useRoom();
+  const { isRoomFull,setIsRoomFull } = useRoom();
 
   useEffect(() => {
     const options = {
@@ -54,14 +54,14 @@ const CardComponent = ({ card }) => {
       headers: {
         accept: "application/json",
         "x-api-key":
-          "NWRjOTRjOTZjYTExNDk5MWIzNzllM2IxMzJjNjg1NTEtMTcyMTc5NjA0OA==",
+        process.env.NEXT_PUBLIC_HEYGEN_API_KEY,
       },
     };
 
     fetch("https://api.heygen.com/v1/streaming.list", options)
       .then((response) => response.json())
       .then((response) => {
-        setIsRoomFull(response.data.sessions.length > 3);
+        setIsRoomFull(response.data.sessions.length >= 3);
       })
       .catch((err) => console.error(err));
   }, []);
