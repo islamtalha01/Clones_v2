@@ -1,0 +1,46 @@
+{
+  "name": "auth-js",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@ai-sdk/openai": "^0.0.40",
+    "@heygen/streaming-avatar": "^1.0.16",
+    "@nextui-org/react": "^2.4.6",
+    "@nextui-org/switch": "^2.0.33",
+    "@nextui-org/system": "^2.2.5",
+    "@nextui-org/theme": "^2.2.9",
+    "@phosphor-icons/react": "^2.1.7",
+    "@react-aria/ssr": "^3.9.5",
+    "@react-aria/visually-hidden": "^3.8.14",
+    "@supabase/auth-ui-react": "^0.4.7",
+    "@supabase/auth-ui-shared": "^0.1.8",
+    "@supabase/ssr": "^0.4.0",
+    "@supabase/supabase-js": "^2.45.0",
+    "ai": "^3.2.45",
+    "clsx": "^2.1.1",
+    "framer-motion": "^11.3.21",
+    "next": "14.2.5",
+    "next-themes": "^0.3.0",
+    "openai": "^4.53.2",
+    "react": "^18",
+    "react-dom": "^18",
+    "react-icons": "^5.2.1",
+    "react-toastify": "^10.0.5",
+    "stripe": "^16.5.0"
+  },
+  "devDependencies": {
+    "@types/react": "18.3.3",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.5",
+    "postcss": "^8",
+    "tailwind-variants": "^0.2.1",
+    "tailwindcss": "^3.4.1",
+    "typescript": "5.5.4"
+  }
+}
