@@ -6,6 +6,8 @@ import { Fira_Code as FontMono, Inter as FontSans } from "next/font/google";
 import { Providers } from "./providers";
 import ClientLayout from "./client-layout"; // Import the client layout
 
+import { RoomProvider } from "../app/RoomContext";
+
 const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
@@ -43,7 +45,9 @@ export default function RootLayout({ children }) {
       <head />
       <body className={clsx("min-h-screen bg-background antialiased")}>
         <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
-          <ClientLayout>{children}</ClientLayout>
+          <RoomProvider>
+            <ClientLayout>{children}</ClientLayout>
+          </RoomProvider>
         </Providers>
       </body>
     </html>

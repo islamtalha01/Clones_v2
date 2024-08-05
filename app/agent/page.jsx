@@ -2,8 +2,19 @@
 
 import MySideBar from "../../components/MySideBar";
 import InteractiveAvatarNew from "../../components/interactiveAvatarNew";
-
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { useRoom } from "../RoomContext";
 export default function Agent() {
+  const { isRoomFull } = useRoom();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (isRoomFull) {
+      router.replace("/");
+    }
+  }, [isRoomFull, router]);
+
   return (
     <main className="relative flex flex-col w-full h-screen overflow-hidden">
       <div className="flex flex-row w-full h-full">

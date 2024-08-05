@@ -11,6 +11,7 @@ import {
   Divider,
   Spinner,
   Tooltip,
+  CardHeader,
 } from "@nextui-org/react";
 import { Microphone, MicrophoneStage } from "@phosphor-icons/react";
 import { useChat } from "ai/react";
@@ -34,6 +35,8 @@ export default function InteractiveAvatar() {
   const [avatarId, setAvatarId] = useState("");
   const [voiceId, setVoiceId] = useState("");
   const [data, setData] = useState();
+  const [header, setHeader] = useState(false);
+
   const [text, setText] = useState("");
   const [initialized, setInitialized] = useState(false); // Track initialization
   const [recording, setRecording] = useState(false); // Track recording state
@@ -105,6 +108,7 @@ export default function InteractiveAvatar() {
         },
         setDebug
       );
+      setHeader(true);
       setData(res);
       setStream(avatar.current.mediaStream);
     } catch (error) {
@@ -162,6 +166,7 @@ export default function InteractiveAvatar() {
       setDebug
     );
     setStream(undefined);
+    setHeader(false);
   }
 
   async function handleSpeak() {
@@ -258,7 +263,7 @@ export default function InteractiveAvatar() {
       headers: {
         accept: "application/json",
         "x-api-key":
-          "NWRjOTRjOTZjYTExNDk5MWIzNzllM2IxMzJjNjg1NTEtMTcyMTc5NjA0OA==",
+          "OWQwNGQ5M2M2YmRkNDcxMWI5ZTE5ZjFlYWM1Y2ExMWUtMTcyMjgzMTM1Nw==",
       },
     };
 
@@ -267,7 +272,8 @@ export default function InteractiveAvatar() {
       .then((response) => {
         // setSessions(response);
         // alert(${response.data});
-        console.log("Connected Session", response);
+        console.log("sesison of the player", response.data.sessions);
+        alert(`Connected Session: ${response?.data?.sessions?.length}`);
       })
       .catch((err) => console.error(err));
   };
@@ -284,6 +290,34 @@ export default function InteractiveAvatar() {
   return (
     <div className="w-full flex flex-col gap-4">
       <Card>
+        {header > 0 && (
+          <CardHeader className="flex justify-between items-center">
+            <>
+              <Button
+                size="md"
+                onClick={endSession}
+                className="bg-gradient-to-tr from-indigo-500 to-indigo-300  text-white rounded-lg"
+                variant="shadow"
+              >
+                End session
+              </Button>
+              <Timer
+                timerStarted={timerStarted}
+                time={time}
+                setTime={setTime}
+              />
+              <Button
+                size="md"
+                onClick={fetchSessions}
+                className="bg-gradient-to-tr from-indigo-500 to-indigo-300  text-white rounded-lg"
+                variant="shadow"
+              >
+                Number of sessions
+              </Button>
+            </>
+          </CardHeader>
+        )}
+
         <CardBody className="h-[500px] flex flex-col justify-center items-center">
           {stream ? (
             <div className="h-[500px] w-auto justify-center items-center flex rounded-lg overflow-hidden p-4">
@@ -302,19 +336,6 @@ export default function InteractiveAvatar() {
             </div>
           ) : !isLoadingSession ? (
             <div className="h-full justify-center items-center flex flex-col gap-8 w-[500px] self-center">
-              <Timer
-                timerStarted={timerStarted}
-                time={time}
-                setTime={setTime}
-              />
-              <Button
-                size="md"
-                onClick={fetchSessions}
-                className="bg-gradient-to-tr from-indigo-500 to-indigo-300  text-white rounded-lg"
-                variant="shadow"
-              >
-                Number of sessions
-              </Button>
               <Button
                 size="md"
                 onClick={startSession}
@@ -376,7 +397,6 @@ export default function InteractiveAvatar() {
             disabled={!stream}
           />
         </CardFooter>
-
         {/* <Button
           size="md"
           onClick={endSession}
