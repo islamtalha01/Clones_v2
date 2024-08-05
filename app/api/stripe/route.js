@@ -3,16 +3,15 @@ import { NextResponse } from "next/server";
 const stripe = require("stripe")(
   "sk_test_51PgrSiRslotwcTtqgXYpTw3izpN15A3nyLXEdxcrBnu6oBKz2WqkuMQ0Nhi6YJB7G7vLqSGPrbqA67WqHuqubqMm00ffIHZmYZ"
 );
-import user from "../../lib/user.js";
 import { createClient } from "../../../utils/supabase/client";
+
 export async function POST(request) {
   const supabase = createClient();
   const { data, error } = await supabase.auth.getUser();
 
-  const userId = data?.user?.id;
-  const price = await request.json();
-
-  console.log("user creds", user);
+  const { price, userCred } = await request.json();
+  console.log("use creds  ", userCred);
+  const userId = userCred;
 
   let session;
   try {
@@ -32,20 +31,9 @@ export async function POST(request) {
         },
       ],
 
-      // success_url: `${process.env.NEXT_PUBLIC_URL}success`,
-      // cancel_url: `${process.env.NEXT_PUBLIC_URL}cancel`,
       success_url: `${process.env.NEXT_PUBLIC_URL}success`,
       cancel_url: `${process.env.NEXT_PUBLIC_URL}cancel`,
-
-      // success_url: `${process.env.CLIENT_URL}/success.html`,
-      // cancel_url: `${process.env.CLIENT_URL}/cancel.html`,
     });
-
-    //   const { data, error } = await supabase.auth.admin.updateUserById(userId, {
-    //     user_metadata: {
-    //         ...paymentPlanDetails
-    //     }
-    // });
   } catch (e) {
     console.log({ error: e.message });
   }

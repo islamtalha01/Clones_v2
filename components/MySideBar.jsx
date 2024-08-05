@@ -78,10 +78,7 @@ const MySideBar = ({ sidebarOpen, setSidebarOpen }) => {
               className="flex items-center text-white w-full focus:outline-none"
             >
               <div className="flex items-center space-x-2">
-                <div
-                  classNam
-                  e="bg-yellow-500 text-black rounded-full h-8 w-8 flex items-center justify-center"
-                >
+                <div className="bg-yellow-500 text-black rounded-full h-8 w-8 flex items-center justify-center">
                   {loader ? (
                     <AiOutlineLoading3Quarters className="animate-spin" />
                   ) : (

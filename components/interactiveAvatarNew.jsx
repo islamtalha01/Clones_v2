@@ -1,4 +1,3 @@
-import { AVATARS, VOICES } from "@/app/lib/constants";
 import {
   Configuration,
   NewSessionData,
@@ -10,9 +9,6 @@ import {
   CardBody,
   CardFooter,
   Divider,
-  Input,
-  Select,
-  SelectItem,
   Spinner,
   Tooltip,
 } from "@nextui-org/react";
@@ -336,7 +332,7 @@ export default function InteractiveAvatar() {
         <CardFooter className="flex flex-col gap-3">
           <InteractiveAvatarTextInput
             label="Chat"
-            placeholder="Chat with the avatar (uses ChatGPT)"
+            placeholder=""
             input={input}
             onSubmit={() => {
               setIsLoadingChat(true);

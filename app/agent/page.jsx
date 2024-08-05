@@ -2,6 +2,7 @@
 
 import InteractiveAvatar from "../../components/InteractiveAvatar";
 import MySideBar from "../../components/MySideBar";
+import InteractiveAvatarNew from "../../components/interactiveAvatarNew";
 
 export default function Agent() {
   return (
@@ -14,7 +15,7 @@ export default function Agent() {
         {/* Main Content Section */}
         <div className="flex flex-1 justify-center items-center min-w-[360px] ">
           <div className="flex flex-col justify-center items-center w-full max-w-screen-lg">
-            <InteractiveAvatar />
+            <InteractiveAvatarNew />
           </div>
         </div>
       </div>
