@@ -34,7 +34,7 @@ export async function POST(req) {
 
   const { data, error } = await supabase
     .from("chats")
-    .insert([{ user_id: "2", messages: responses }]);
+    .insert([{ messages: responses }]);
   console.log("data", data);
   console.log("error", error);
   return result.toAIStreamResponse();
