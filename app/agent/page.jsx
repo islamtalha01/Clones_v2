@@ -1,6 +1,5 @@
 "use client";
 
-import InteractiveAvatar from "../../components/InteractiveAvatar";
 import MySideBar from "../../components/MySideBar";
 import InteractiveAvatarNew from "../../components/interactiveAvatarNew";
 

@@ -51,8 +51,8 @@ const ChatHistory = () => {
         <MySideBar />
       </div>
       {/* Main Chat Area */}
-      <div className="flex-1 relative">
-        {/* Chat Messages */}
+      {/* <div className="flex-1 relative">
+       
         <div className="h-screen overflow-y-auto p-4 pb-36">
           {messages?.map((chatObj, chatIndex) =>
             chatObj.messages.map((msg, msgIndex) => (
@@ -106,6 +106,48 @@ const ChatHistory = () => {
                       <span class="block font-bold text-gray-700">You </span>
                       {msg.content}
                     </p>
+                  </div>
+                )}
+              </div>
+            ))
+          )}
+        </div>
+      </div> */}
+
+      <div className="flex-1">
+        {/* Chat Header */}
+
+        {/* Chat Messages */}
+        <div className="h-screen overflow-y-auto p-4 pb-36">
+          {messages?.map((chatObj, chatIndex) =>
+            chatObj.messages.map((msg, msgIndex) => (
+              <div key={`${chatIndex}-${msgIndex}`}>
+                {msg.role === "system" && (
+                  <div className="flex mb-4 cursor-pointer">
+                    <div className="w-9 h-9 rounded-full flex items-center justify-center mr-2">
+                      <img
+                        src="https://placehold.co/200x/ffa8e4/ffffff.svg?text=ʕ•́ᴥ•̀ʔ&font=Lato"
+                        alt="User Avatar"
+                        className="w-8 h-8 rounded-full"
+                      />
+                    </div>
+                    <div className="flex max-w-96 bg-white rounded-lg p-3 gap-3">
+                      <p className="text-gray-700">{msg.content}</p>
+                    </div>
+                  </div>
+                )}
+                {msg.role === "user" && (
+                  <div className="flex justify-end mb-4 cursor-pointer">
+                    <div className="flex max-w-96 bg-indigo-500 text-white rounded-lg p-3 gap-3">
+                      <p>{msg.content}</p>
+                    </div>
+                    <div className="w-9 h-9 rounded-full flex items-center justify-center ml-2">
+                      <img
+                        src="https://placehold.co/200x/b7a8ff/ffffff.svg?text=ʕ•́ᴥ•̀ʔ&font=Lato"
+                        alt="My Avatar"
+                        className="w-8 h-8 rounded-full"
+                      />
+                    </div>
                   </div>
                 )}
               </div>

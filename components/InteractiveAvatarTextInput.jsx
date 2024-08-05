@@ -22,13 +22,39 @@ export default function InteractiveAvatarTextInput({
 
   return (
     <Input
+      classNames={{
+        label: "text-black/50 dark:text-white/90",
+        input: [
+          "bg-transparent",
+          "text-black/90 dark:text-white/90",
+          "placeholder:text-default-700/50 dark:placeholder:text-white/60",
+        ],
+        innerWrapper: "bg-transparent",
+        inputWrapper: [
+          "shadow-xl",
+          "bg-default-200/50",
+          "dark:bg-default/60",
+          "backdrop-blur-xl",
+          "backdrop-saturate-200",
+          "hover:bg-default-200/70",
+          "dark:hover:bg-default/70",
+          "group-data-[focus=true]:bg-default-200/50",
+          "dark:group-data-[focus=true]:bg-default/60",
+          "!cursor-text",
+          "text-md w-full",
+          " bg-black border-2",
+          "border-gray-200",
+          "rounded-full ",
+          "p-6",
+        ],
+      }}
       endContent={
         <div className="flex flex-row items-center h-full">
           {endContent}
           <Tooltip content="Send message">
             {loading ? (
               <Spinner
-                className="text-indigo-300 hover:text-indigo-200"
+                className="text-indigo-500 hover:text-indigo-200"
                 size="sm"
                 color="default"
               />
@@ -40,7 +66,7 @@ export default function InteractiveAvatarTextInput({
               >
                 <PaperPlaneRight
                   className={clsx(
-                    "text-indigo-300 hover:text-indigo-200",
+                    "text-indigo-500 hover:text-indigo-200",
                     disabled && "opacity-50"
                   )}
                   size={24}
@@ -51,7 +77,7 @@ export default function InteractiveAvatarTextInput({
         </div>
       }
       label={label}
-      placeholder={placeholder}
+      // placeholder={placeholder}
       size="sm"
       value={input}
       onKeyDown={(e) => {
@@ -61,6 +87,7 @@ export default function InteractiveAvatarTextInput({
       }}
       onValueChange={setInput}
       isDisabled={disabled}
+      // className="text-md w-full  bg-black border-2 border-gray-200 rounded-full py-2"
     />
   );
 }

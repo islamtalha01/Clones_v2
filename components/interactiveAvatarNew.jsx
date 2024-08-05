@@ -286,7 +286,7 @@ export default function InteractiveAvatar() {
       <Card>
         <CardBody className="h-[500px] flex flex-col justify-center items-center">
           {stream ? (
-            <div className="h-[500px] w-[900px] justify-center items-center flex rounded-lg overflow-hidden">
+            <div className="h-[500px] w-auto justify-center items-center flex rounded-lg overflow-hidden p-4">
               <video
                 ref={mediaStream}
                 autoPlay
@@ -331,7 +331,7 @@ export default function InteractiveAvatar() {
         <Divider />
         <CardFooter className="flex flex-col gap-3">
           <InteractiveAvatarTextInput
-            label="Chat"
+            className="m-4"
             placeholder=""
             input={input}
             onSubmit={() => {
@@ -353,10 +353,11 @@ export default function InteractiveAvatar() {
                   isDisabled={!stream}
                   isIconOnly
                   className={clsx(
-                    "mr-4 text-white",
+                    "mr-4 text-black",
+                    "rounded-md",
                     !recording
-                      ? "bg-gradient-to-tr from-indigo-500 to-indigo-300"
-                      : ""
+                      ? "bg-gradient-to-tr from-indigo-500 to-indigo-500"
+                      : "bg-gradient-to-tr from-indigo-500 to-indigo-500"
                   )}
                   size="sm"
                   variant="shadow"
@@ -365,7 +366,7 @@ export default function InteractiveAvatar() {
                     <Microphone size={20} />
                   ) : (
                     <>
-                      <div className="absolute h-full w-full bg-gradient-to-tr from-indigo-500 to-indigo-300 animate-pulse -z-10"></div>
+                      <div className="absolute h-full w-full bg-gradient-to-tr from-indigo-500 to-indigo-500 animate-pulse -z-10"></div>
                       <MicrophoneStage size={20} />
                     </>
                   )}
@@ -376,14 +377,14 @@ export default function InteractiveAvatar() {
           />
         </CardFooter>
 
-        <Button
+        {/* <Button
           size="md"
           onClick={endSession}
           className="bg-gradient-to-tr from-indigo-500 to-indigo-300  text-white rounded-lg"
           variant="shadow"
         >
           End session
-        </Button>
+        </Button> */}
       </Card>
     </div>
   );
