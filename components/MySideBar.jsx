@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import SideBarItem from "./SideBarItem";
 import ChatItem from "./ChatItem";
 import { logout } from "../app/actions";
@@ -12,38 +12,71 @@ import {
 } from "react-icons/hi";
 import { createClient } from "../utils/supabase/client";
 import { useRouter } from "next/navigation";
-import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 const MySideBar = ({ sidebarOpen, setSidebarOpen }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [user, setUser] = useState(null);
   const [loader, setLoading] = useState(false);
+  const [planName, setPlanName] = useState("");
   const router = useRouter();
+
+  // const handleToggleDropdown = () => {
+  //   setDropdownOpen((prevState) => !prevState);
+  // };
+
+  // const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
   const handleToggleDropdown = () => {
-    setDropdownOpen((prevState) => !prevState);
+    setDropdownOpen(!dropdownOpen);
   };
+
+  const handleClickOutside = (event) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setDropdownOpen(false);
+    }
+  };
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   async function getLoggedInUser() {
     const supabase = createClient();
 
     const { data, error } = await supabase.auth.getUser();
 
     setLoading(true);
-    // const { data, error } = await supabase.auth.getSession();
-
-    console.log("user data", data?.user);
-
-    // const userCred = {
-    //   id: data?.user?.id,
-    // };
-    console.log("user cred", data?.user?.id);
 
     localStorage.setItem("usercreds", data?.user?.id);
 
     if (error) router.push("/login");
+    const { data: paymentData, error: paymentError } = await supabase
+      .from("payments")
+      .select("plan_data")
+      .eq("user_id", data?.user?.id);
 
+    if (paymentError) {
+      console.error("Error fetching payment data:", paymentError);
+      return null;
+    }
+
+    if (paymentData && paymentData.length > 0) {
+      const planData = paymentData[0].plan_data;
+      if (planData && planData.name) {
+        setPlanName(planData.name);
+      } else {
+        console.error("Plan data or plan name not found");
+      }
+    } else {
+      console.log("No payment data found for the given user ID.");
+    }
     setUser({ ...data?.user?.user_metadata, id: data?.user?.id });
     setLoading(false);
   }
+
   useEffect(() => {
     getLoggedInUser();
   }, []);
@@ -72,7 +105,7 @@ const MySideBar = ({ sidebarOpen, setSidebarOpen }) => {
           </div>
 
           {/* Name Tile at the Bottom */}
-          <div className="relative  mb-24">
+          {/* <div className="relative  mb-24">
             <button
               onClick={handleToggleDropdown}
               className="flex items-center text-white w-full focus:outline-none"
@@ -92,6 +125,52 @@ const MySideBar = ({ sidebarOpen, setSidebarOpen }) => {
                   {user ? user.full_name : "Loading Name ..."}
                 </span>
                 <HiChevronDown
+                  className={`transform transition-transform ${"rotate-0"}`}
+                />
+              </div>
+            </button>
+            {dropdownOpen && (
+              <div className="absolute bottom-4 left-0 right-0 bg-gray-800 rounded-lg shadow-lg text-white z-10">
+                <div className="flex items-center py-2 px-4 border-b border-gray-700 hover:bg-gray-700 cursor-pointer">
+                  <HiOutlineClipboardList className="mr-2" />
+                  <p className="text-sm">Active plan: {planName}</p>
+                </div>
+
+                <div className="flex items-center py-2 px-4 hover:bg-gray-700 cursor-pointer">
+                  <HiOutlineLogout className="mr-2" />
+                  <form>
+                    <button
+                      type="submit"
+                      formAction={logout}
+                      className="text-sm text-red-500 hover:underline"
+                    >
+                      Logout
+                    </button>
+                  </form>
+                </div>
+              </div>
+            )}
+          </div> */}
+
+          <div ref={dropdownRef} className="relative mb-36">
+            <button
+              onClick={handleToggleDropdown}
+              className="flex items-center text-white w-full focus:outline-none"
+            >
+              <div className="flex items-center space-x-2">
+                <div className="bg-yellow-500 text-black rounded-full h-8 w-8 flex items-center justify-center">
+                  {user && user.avatar_url && (
+                    <img
+                      className="rounded-full"
+                      src={user.avatar_url}
+                      alt="User Avatar"
+                    />
+                  )}
+                </div>
+                <span className="flex-1 text-left">
+                  {user ? user.full_name : "Loading Name ..."}
+                </span>
+                <HiChevronDown
                   className={`transform transition-transform ${
                     dropdownOpen ? "rotate-180" : "rotate-0"
                   }`}
@@ -99,14 +178,10 @@ const MySideBar = ({ sidebarOpen, setSidebarOpen }) => {
               </div>
             </button>
             {dropdownOpen && (
-              <div className="absolute bottom-10 left-0 right-0 bg-gray-800 rounded-lg shadow-lg text-white z-10">
+              <div className="absolute top-full left-0 right-0 bg-gray-800 rounded-lg shadow-lg text-white z-10">
                 <div className="flex items-center py-2 px-4 border-b border-gray-700 hover:bg-gray-700 cursor-pointer">
                   <HiOutlineClipboardList className="mr-2" />
-                  <p className="text-sm">Active plan: Pro</p>
-                </div>
-                <div className="flex items-center py-2 px-4 border-b border-gray-700 hover:bg-gray-700 cursor-pointer">
-                  <HiCog className="mr-2" />
-                  <p className="text-sm">Settings</p>
+                  <p className="text-sm">Active plan: {planName}</p>
                 </div>
                 <div className="flex items-center py-2 px-4 hover:bg-gray-700 cursor-pointer">
                   <HiOutlineLogout className="mr-2" />

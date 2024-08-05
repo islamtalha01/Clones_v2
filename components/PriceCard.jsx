@@ -8,7 +8,6 @@ const PriceCard = ({ price, userCred }) => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log("data of stripe ", data);
         window.location.href = data.url;
       });
   }
@@ -49,7 +48,6 @@ const PriceCard = ({ price, userCred }) => {
       >
         Choose plan
       </button>
-      <div>usercreds:{userCred}</div>
     </div>
   );
 };

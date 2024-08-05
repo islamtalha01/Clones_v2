@@ -36,7 +36,6 @@ const ChatHistory = () => {
       if (error) {
         console.error("Error fetching messages:", error);
       } else {
-        console.log("Fetched data:", data);
         if (data) {
           setMessages(data);
         }

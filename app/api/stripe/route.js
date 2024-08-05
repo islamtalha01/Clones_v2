@@ -10,7 +10,6 @@ export async function POST(request) {
   const { data, error } = await supabase.auth.getUser();
 
   const { price, userCred } = await request.json();
-  console.log("use creds  ", userCred);
   const userId = userCred;
 
   let session;
@@ -51,7 +50,6 @@ export async function POST(request) {
   if (paymentError) {
     console.error("Error inserting data:", paymentError);
   } else {
-    console.log("Data inserted successfully:", paymentData);
   }
 
   return NextResponse.json(session);

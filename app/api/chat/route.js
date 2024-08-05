@@ -9,8 +9,6 @@ export const maxDuration = 30;
 export async function POST(req) {
   const { messages } = await req.json();
 
-  console.log("msg", messages);
-
   const result = await streamText({
     model: openai("gpt-4-turbo"),
     messages,
@@ -19,7 +17,6 @@ export async function POST(req) {
   let finalString = "";
   for await (const textPart of result.textStream) {
     finalString += textPart;
-    console.log(textPart);
   }
 
   const userContent = messages
@@ -35,7 +32,5 @@ export async function POST(req) {
   const { data, error } = await supabase
     .from("chats")
     .insert([{ messages: responses }]);
-  console.log("data", data);
-  console.log("error", error);
   return result.toAIStreamResponse();
 }
