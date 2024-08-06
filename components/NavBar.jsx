@@ -51,7 +51,7 @@ export default function NavBar({ toggleSidebar }) {
       className="bg-[#1C1C24] h-[80px] border-b border-[#292932] w-full flex justify-between items-center px-4"
     >
       {/* Ensure router pathname check is within component scope */}
-      {pathname !== "/" && pathname!=='/login' && (
+      {pathname !== "/" && pathname !== "/login" && (
         <button
           className="text-white lg:hidden"
           onClick={toggleSidebar}
@@ -60,11 +60,7 @@ export default function NavBar({ toggleSidebar }) {
           <HiMenu size={24} />
         </button>
       )}
-      <NavbarBrand
-        as={Link}
-        href="/user/dashboard"
-        className="flex items-center"
-      >
+      <NavbarBrand as={Link} href="/" className="flex items-center">
         <svg
           width="112"
           height="32"

@@ -6,7 +6,9 @@ import MySideBar from "../components/MySideBar";
 function Home() {
   return (
     <>
-          <Discover />
+      <div className="mt-[138px]">
+        <Discover />
+      </div>
     </>
   );
 }

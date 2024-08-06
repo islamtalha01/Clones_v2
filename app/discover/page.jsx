@@ -46,15 +46,14 @@ const cardsData = [
 const CardComponent = ({ card }) => {
   // const [isRoomFull, setIsRoomFull] = useState(false);
 
-  const { isRoomFull,setIsRoomFull } = useRoom();
+  const { isRoomFull, setIsRoomFull } = useRoom();
 
   useEffect(() => {
     const options = {
       method: "GET",
       headers: {
         accept: "application/json",
-        "x-api-key":
-        process.env.NEXT_PUBLIC_HEYGEN_API_KEY,
+        "x-api-key": process.env.NEXT_PUBLIC_HEYGEN_API_KEY,
       },
     };
 
@@ -67,40 +66,6 @@ const CardComponent = ({ card }) => {
   }, []);
 
   return (
-    // <Link href="/agent">
-    //   <Card className="max-w-[400px] max-sm:w-full  max-sm:h-[500px] h-[360px]">
-    //     <CardHeader className="justify-between">
-    //       <div className="flex gap-5">
-    //         <Avatar isBordered radius="full" size="md" src={card.avatar} />
-    //         <div className="flex flex-col gap-1 items-start justify-center">
-    //           <h4 className="text-small font-semibold leading-none text-default-600">
-    //             {card.name}
-    //           </h4>
-    //           <h5 className="text-small tracking-tight text-default-400">
-    //             {card.username}
-    //           </h5>
-    //         </div>
-    //       </div>
-    //     </CardHeader>
-
-    //     <CardBody>
-    //       <div className="pt-1 pb-2">
-    //         <Chip radius="md">Therapist</Chip>
-    //       </div>
-    //       <h1 className="text-lg font-bold">{card.heading}</h1>
-    //       <p className="p-2 text-small">{card.description}</p>
-    //     </CardBody>
-    //     <CardFooter className="p-0">
-    //       {isRoomFull ? (
-    //         <div className="w-full  text-center bg-red-500 py-3">Room Full</div>
-    //       ) : (
-    //         <></>
-    //       )}
-    //     </CardFooter>
-    //     <Divider />
-    //   </Card>
-    // </Link>
-
     <>
       {isRoomFull ? (
         <div className="max-w-[400px] max-sm:w-full max-sm:h-[500px] h-[360px]">
@@ -134,8 +99,9 @@ const CardComponent = ({ card }) => {
           </Card>
         </div>
       ) : (
-        <Link href="/agent">
-          <Card className="max-w-[400px] max-sm:w-full max-sm:h-[500px] h-[360px]">
+        // <Link href="/agent">
+        <Card className="max-w-[336px] max-sm:w-full max-sm:h-[500px] h-[392px] bg-[#1C1C24] border-[0.5px] border-gray-300 rounded-md p-4">
+          <Link href="/agent">
             <CardHeader className="justify-between">
               <div className="flex gap-5">
                 <Avatar isBordered radius="full" size="md" src={card.avatar} />
@@ -149,17 +115,18 @@ const CardComponent = ({ card }) => {
                 </div>
               </div>
             </CardHeader>
-            <CardBody>
-              <div className="pt-1 pb-2">
-                <Chip radius="md">Therapist</Chip>
-              </div>
-              <h1 className="text-lg font-bold">{card.heading}</h1>
-              <p className="p-2 text-small">{card.description}</p>
-            </CardBody>
-            <CardFooter className="p-0"></CardFooter>
-            <Divider />
-          </Card>
-        </Link>
+          </Link>
+          <CardBody>
+            <div className="pt-1 pb-2">
+              <Chip radius="md">Therapist</Chip>
+            </div>
+            <h1 className="text-lg font-bold">{card.heading}</h1>
+            <p className="p-2 text-small">{card.description}</p>
+          </CardBody>
+          <CardFooter className="p-0"></CardFooter>
+          <Divider />
+        </Card>
+        // </Link>
       )}
     </>
   );

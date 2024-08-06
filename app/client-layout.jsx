@@ -14,12 +14,17 @@ export default function ClientLayout({ children }) {
   };
 
   return (
-    <main className="relative flex flex-col min-h-screen">
+    <main className="relative flex flex-col ">
       <ToastContainer />
       <NavBar toggleSidebar={toggleSidebar} />
       <div className="flex flex-row flex-grow">
-        <div className={`hidden max-lg:flex w-[250px] ${sidebarOpen?"":"w-0"}`}>
-          <MySideBar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+        <div
+          className={`hidden max-lg:flex w-[250px] ${sidebarOpen ? "" : "w-0"}`}
+        >
+          <MySideBar
+            sidebarOpen={sidebarOpen}
+            setSidebarOpen={setSidebarOpen}
+          />
         </div>
         <div className="flex justify-center items-center flex-grow ">
           {children}

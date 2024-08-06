@@ -1,5 +1,7 @@
 const HEYGEN_API_KEY = process.env.NEXT_PUBLIC_HEYGEN_API_KEY;
 
+console.log("hygen epi key,", HEYGEN_API_KEY);
+
 export async function POST() {
   try {
     if (!HEYGEN_API_KEY) {
