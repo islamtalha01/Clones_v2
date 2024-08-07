@@ -13,6 +13,7 @@ import {
   Tooltip,
   CardHeader,
 } from "@nextui-org/react";
+import publicAvatarsJson from "../public/public-streaming-avatars.json";
 import InteractiveAvatarChatMessages from "./InteractiveAvatarChatMessages";
 import { Microphone, MicrophoneStage } from "@phosphor-icons/react";
 import { useChat } from "ai/react";
@@ -85,7 +86,11 @@ export default function InteractiveAvatar() {
       },
     ],
   });
-
+  const currentAvatarName = "josh_lite3_20230714";
+  const avatarImage = publicAvatarsJson.data.avatar.find(
+    (av) => av.pose_id === currentAvatarName
+  ).normal_preview;
+  console.log(avatarImage);
   async function fetchAccessToken() {
     try {
       const response = await fetch("/api/get-access-token", {
@@ -112,7 +117,7 @@ export default function InteractiveAvatar() {
         {
           newSessionRequest: {
             quality: "low",
-            avatarName: "josh_lite3_20230714",
+            avatarName: currentAvatarName,
             voice: { voiceId: "077ab11b14f04ce0b49b5f6e5cc20979" },
           },
         },
@@ -338,9 +343,9 @@ export default function InteractiveAvatar() {
           </CardHeader>
         )}
 
-        <CardBody className="h-[500px] flex flex-col justify-center items-center">
+        <CardBody className="h-[600px] flex flex-col justify-center items-center">
           {stream ? (
-            <div className="h-[500px] w-auto justify-center items-center flex rounded-lg overflow-hidden p-4">
+            <div className="h-[600px] w-auto justify-center items-center flex rounded-lg overflow-hidden p-4">
               <video
                 ref={mediaStream}
                 autoPlay
@@ -358,25 +363,62 @@ export default function InteractiveAvatar() {
             </div>
           ) : !isLoadingSession ? (
             <div
-              className="h-full justify-center items-center flex flex-col gap-8 w-[500px] self-center"
-              style={{ width: "40%" }}
+              className="w-auto justify-center flex rounded-lg overflow-hidden p-4"
+              style={{
+                background: "transparent",
+                width: "100%",
+                height: "100%",
+                backgroundImage: `url(${avatarImage})`,
+                backgroundSize: "cover",
+                margin: "2px auto",
+              }}
             >
-              <Button
-                size="md"
-                onClick={startSession}
-                className="bg-gradient-to-tr from-indigo-500 to-indigo-300 w-full text-white"
-                variant="shadow"
+              <div
+                className=" justify-center items-center flex flex-col gap-8 w-[500px] self-center"
                 style={{
-                  borderRadius: "5px",
-                  width: "fit-content",
-                  padding: "10px 30px",
+                  width: "40%",
+                  background: "#9D979A",
+                  opacity: 0.8,
+                  borderRadius: "12px",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  padding: "20px",
+                  minWidth: "450px",
+                  marginTop: "300px",
                 }}
               >
-                Start new chat
-              </Button>
+                Chat with HeyGen Interactive Avatar now!
+                <Button
+                  size="md"
+                  onClick={startSession}
+                  className="bg-gradient-to-tr from-indigo-500 to-indigo-300 w-full text-white"
+                  variant="shadow"
+                  style={{
+                    borderRadius: "8px",
+                    width: "fit-content",
+                    padding: "10px 30px",
+                    background: "rgb(117, 89, 255)",
+                  }}
+                >
+                  Start new chat
+                </Button>
+              </div>
             </div>
           ) : (
-            <Spinner size="lg" color="default" />
+            <div
+              className="w-auto justify-center flex rounded-lg overflow-hidden p-4"
+              style={{
+                background: "transparent",
+                width: "100%",
+                height: "100%",
+                backgroundImage: `url(${avatarImage})`,
+                backgroundSize: "cover",
+                margin: "2px auto",
+              }}
+            >
+              <Spinner size="lg" color="default" />
+            </div>
           )}
         </CardBody>
         <Divider />
@@ -388,6 +430,7 @@ export default function InteractiveAvatar() {
               marginLeft: "auto",
               marginRight: "auto",
               marginTop: "-100px",
+              borderRadius: "20px",
             }}
           >
             <InteractiveAvatarTextInput
