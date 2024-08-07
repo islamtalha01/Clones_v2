@@ -357,14 +357,22 @@ export default function InteractiveAvatar() {
               <InteractiveAvatarChatMessages messages={messages} />
             </div>
           ) : !isLoadingSession ? (
-            <div className="h-full justify-center items-center flex flex-col gap-8 w-[500px] self-center">
+            <div
+              className="h-full justify-center items-center flex flex-col gap-8 w-[500px] self-center"
+              style={{ width: "40%" }}
+            >
               <Button
                 size="md"
                 onClick={startSession}
                 className="bg-gradient-to-tr from-indigo-500 to-indigo-300 w-full text-white"
                 variant="shadow"
+                style={{
+                  borderRadius: "5px",
+                  width: "fit-content",
+                  padding: "10px 30px",
+                }}
               >
-                Start session
+                Start new chat
               </Button>
             </div>
           ) : (
@@ -372,53 +380,62 @@ export default function InteractiveAvatar() {
           )}
         </CardBody>
         <Divider />
-        <CardFooter className="flex flex-col gap-3">
-          <InteractiveAvatarTextInput
-            className="m-4"
-            placeholder=""
-            input={input}
-            onSubmit={() => {
-              setIsLoadingChat(true);
-              if (!input) {
-                setDebug("Please enter text to send to ChatGPT");
-                return;
-              }
-              handleSubmit();
+        {stream && (
+          <CardFooter
+            className="flex flex-col gap-3"
+            style={{
+              width: "40%",
+              marginLeft: "auto",
+              marginRight: "auto",
             }}
-            setInput={setInput}
-            loading={isLoadingChat}
-            endContent={
-              <Tooltip
-                content={!recording ? "Start recording" : "Stop recording"}
-              >
-                <Button
-                  onClick={!recording ? startRecording : stopRecording}
-                  isDisabled={!stream}
-                  isIconOnly
-                  className={clsx(
-                    "mr-4 text-black",
-                    "rounded-md",
-                    !recording
-                      ? "bg-gradient-to-tr from-indigo-500 to-indigo-500"
-                      : "bg-gradient-to-tr from-indigo-500 to-indigo-500"
-                  )}
-                  size="sm"
-                  variant="shadow"
+          >
+            <InteractiveAvatarTextInput
+              className="m-4"
+              placeholder=""
+              input={input}
+              onSubmit={() => {
+                setIsLoadingChat(true);
+                if (!input) {
+                  setDebug("Please enter text to send to ChatGPT");
+                  return;
+                }
+                handleSubmit();
+              }}
+              setInput={setInput}
+              loading={isLoadingChat}
+              endContent={
+                <Tooltip
+                  content={!recording ? "Start recording" : "Stop recording"}
                 >
-                  {!recording ? (
-                    <Microphone size={20} />
-                  ) : (
-                    <>
-                      <div className="absolute h-full w-full bg-gradient-to-tr from-indigo-500 to-indigo-500 animate-pulse -z-10"></div>
-                      <MicrophoneStage size={20} />
-                    </>
-                  )}
-                </Button>
-              </Tooltip>
-            }
-            disabled={!stream}
-          />
-        </CardFooter>
+                  <Button
+                    onClick={!recording ? startRecording : stopRecording}
+                    isDisabled={!stream}
+                    isIconOnly
+                    className={clsx(
+                      "mr-4 text-black",
+                      "rounded-md",
+                      !recording
+                        ? "bg-gradient-to-tr from-indigo-500 to-indigo-500"
+                        : "bg-gradient-to-tr from-indigo-500 to-indigo-500"
+                    )}
+                    size="sm"
+                    variant="shadow"
+                  >
+                    {!recording ? (
+                      <Microphone size={20} />
+                    ) : (
+                      <>
+                        <div className="absolute h-full w-full bg-gradient-to-tr from-indigo-500 to-indigo-500 animate-pulse -z-10"></div>
+                        <MicrophoneStage size={20} />
+                      </>
+                    )}
+                  </Button>
+                </Tooltip>
+              }
+              disabled={!stream}
+            />
+          </CardFooter>
+        )}
         {/* <Button
           size="md"
           onClick={endSession}
