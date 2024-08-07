@@ -357,14 +357,22 @@ export default function InteractiveAvatar() {
               <InteractiveAvatarChatMessages messages={messages} />
             </div>
           ) : !isLoadingSession ? (
-            <div className="h-full justify-center items-center flex flex-col gap-8 w-[500px] self-center">
+            <div
+              className="h-full justify-center items-center flex flex-col gap-8 w-[500px] self-center"
+              style={{ width: "40%" }}
+            >
               <Button
                 size="md"
                 onClick={startSession}
                 className="bg-gradient-to-tr from-indigo-500 to-indigo-300 w-full text-white"
                 variant="shadow"
+                style={{
+                  borderRadius: "5px",
+                  width: "fit-content",
+                  padding: "10px 30px",
+                }}
               >
-                Start session
+                Start new chat
               </Button>
             </div>
           ) : (
