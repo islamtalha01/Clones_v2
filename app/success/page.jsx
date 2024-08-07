@@ -1,12 +1,8 @@
 import React from "react";
-import MySideBar from "../../components/MySideBar";
 const Success = () => {
   return (
     <main className="relative flex flex-col  w-screen">
       <div className="flex flex-row ">
-        <div className="w-[250px]  flex flex-col">
-          <MySideBar />
-        </div>
         <div className="flex  justify-center items-center w-screen ">
           <div
             style={{ minHeight: "calc(100vh - 85px)" }}
