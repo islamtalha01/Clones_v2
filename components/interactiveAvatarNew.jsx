@@ -13,6 +13,7 @@ import {
   Tooltip,
   CardHeader,
 } from "@nextui-org/react";
+import InteractiveAvatarChatMessages from "./InteractiveAvatarChatMessages";
 import { Microphone, MicrophoneStage } from "@phosphor-icons/react";
 import { useChat } from "ai/react";
 import clsx from "clsx";
@@ -48,8 +49,17 @@ export default function InteractiveAvatar() {
   const [time, setTime] = useState(0);
   const [timerStarted, setTimerStarted] = useState(true);
 
-  const { input, setInput, handleSubmit } = useChat({
+  const [chatId, setChatId] = useState(undefined);
+  const {
+    input,
+    setInput,
+    handleSubmit,
+    messages,
+    stop: stopOpenAISession,
+  } = useChat({
+    id: chatId?.toString(),
     onFinish: async (message) => {
+      // this is a stream, it can also be used to show chat history in real-time chat history
       console.log("ChatGPT Response:", message);
 
       if (!initialized || !avatar.current) {
@@ -161,12 +171,22 @@ export default function InteractiveAvatar() {
       setDebug("Avatar API not initialized");
       return;
     }
+    console.log("Ending session");
     await avatar.current.stopAvatar(
       { stopSessionRequest: { sessionId: data?.sessionId } },
-      setDebug
+      (response) => {
+        console.log("Enfinishing avatar session", response);
+        setDebug(response);
+        setChatId((chatId) => (chatId ?? 0) + 1);
+        stopOpenAISession();
+      }
     );
+    setChatId((chatId) => (chatId ?? 0) + 1);
     setStream(undefined);
     setHeader(false);
+    setData(undefined);
+    // setTimerStarted(false);
+    // setTime(0);
   }
 
   async function handleSpeak() {
@@ -329,10 +349,12 @@ export default function InteractiveAvatar() {
                   width: "100%",
                   height: "100%",
                   objectFit: "contain",
+                  borderRadius: "12px",
                 }}
               >
                 <track kind="captions" />
               </video>
+              <InteractiveAvatarChatMessages messages={messages} />
             </div>
           ) : !isLoadingSession ? (
             <div className="h-full justify-center items-center flex flex-col gap-8 w-[500px] self-center">
