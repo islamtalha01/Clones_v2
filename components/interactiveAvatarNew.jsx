@@ -10,6 +10,9 @@ import {
   CardFooter,
   Divider,
   Spinner,
+  Input,
+  Select,
+  SelectItem,
   Tooltip,
   CardHeader,
 } from "@nextui-org/react";
@@ -22,6 +25,7 @@ import OpenAI from "openai";
 import { useEffect, useRef, useState } from "react";
 import InteractiveAvatarTextInput from "./InteractiveAvatarTextInput";
 import Timer from "./Timer";
+import { AVATARS, VOICES } from "../app/lib/constants";
 
 const openai = new OpenAI({
   apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
@@ -38,7 +42,7 @@ export default function InteractiveAvatar() {
   const [voiceId, setVoiceId] = useState("");
   const [data, setData] = useState();
   const [header, setHeader] = useState(false);
-
+  const [loader, setLoader] = useState(true);
   const [text, setText] = useState("");
   const [initialized, setInitialized] = useState(false); // Track initialization
   const [recording, setRecording] = useState(false); // Track recording state
@@ -91,6 +95,7 @@ export default function InteractiveAvatar() {
     (av) => av.pose_id === currentAvatarName
   ).normal_preview;
   console.log(avatarImage);
+
   async function fetchAccessToken() {
     try {
       const response = await fetch("/api/get-access-token", {
@@ -107,6 +112,7 @@ export default function InteractiveAvatar() {
 
   async function startSession() {
     setIsLoadingSession(true);
+    setLoader(true);
     await updateToken();
     if (!avatar.current) {
       setDebug("Avatar API is not initialized");
@@ -117,8 +123,8 @@ export default function InteractiveAvatar() {
         {
           newSessionRequest: {
             quality: "low",
-            avatarName: currentAvatarName,
-            voice: { voiceId: "077ab11b14f04ce0b49b5f6e5cc20979" },
+            avatarName: avatarId,
+            voice: { voiceId: voiceId },
           },
         },
         setDebug
@@ -134,6 +140,8 @@ export default function InteractiveAvatar() {
         }`
       );
     }
+    setLoader(false);
+
     setIsLoadingSession(false);
   }
 
@@ -194,19 +202,19 @@ export default function InteractiveAvatar() {
     // setTime(0);
   }
 
-  async function handleSpeak() {
-    setIsLoadingRepeat(true);
-    if (!initialized || !avatar.current) {
-      setDebug("Avatar API not initialized");
-      return;
-    }
-    await avatar.current
-      .speak({ taskRequest: { text: text, sessionId: data?.sessionId } })
-      .catch((e) => {
-        setDebug(e.message);
-      });
-    setIsLoadingRepeat(false);
-  }
+  // async function handleSpeak() {
+  //   setIsLoadingRepeat(true);
+  //   if (!initialized || !avatar.current) {
+  //     setDebug("Avatar API not initialized");
+  //     return;
+  //   }
+  //   await avatar.current
+  //     .speak({ taskRequest: { text: text, sessionId: data?.sessionId } })
+  //     .catch((e) => {
+  //       setDebug(e.message);
+  //     });
+  //   setIsLoadingRepeat(false);
+  // }
 
   useEffect(() => {
     async function init() {
@@ -342,7 +350,57 @@ export default function InteractiveAvatar() {
             </>
           </CardHeader>
         )}
-
+        {loader && (
+          <>
+            <div className="flex flex-row justify-between gap-4 w-full">
+              <div className="flex flex-col gap-2 w-full">
+                <p className="text-sm font-medium leading-none">
+                  Custom Avatar ID (optional)
+                </p>
+                {/* <Input
+                  value={avatarId}
+                  onChange={(e) => setAvatarId(e.target.value)}
+                  placeholder="Enter a custom avatar ID"
+                /> */}
+                <Select
+                  placeholder="Or select one from these example avatars"
+                  size="md"
+                  onChange={(e) => setAvatarId(e.target.value)}
+                >
+                  {AVATARS.map((avatar) => (
+                    <SelectItem
+                      key={avatar.avatar_id}
+                      textValue={avatar.avatar_id}
+                    >
+                      {avatar.name}
+                    </SelectItem>
+                  ))}
+                </Select>
+              </div>
+              <div className="flex flex-col gap-2 w-full">
+                <p className="text-sm font-medium leading-none">
+                  Custom Voice ID (optional)
+                </p>
+                {/* <Input
+      value={voiceId}
+      onChange={(e) => setVoiceId(e.target.value)}
+      placeholder="Enter a custom voice ID"
+    /> */}
+                <Select
+                  placeholder="Or select one from these example voices"
+                  size="md"
+                  onChange={(e) => setVoiceId(e.target.value)}
+                >
+                  {VOICES.map((voice) => (
+                    <SelectItem key={voice.voice_id} textValue={voice.voice_id}>
+                      {voice.name} | {voice.language} | {voice.gender}
+                    </SelectItem>
+                  ))}
+                </Select>
+              </div>
+            </div>
+          </>
+        )}
         <CardBody className="h-[600px] flex flex-col justify-center items-center">
           {stream ? (
             <div className="h-[600px] w-auto justify-center items-center flex rounded-lg overflow-hidden p-4">

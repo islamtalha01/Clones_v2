@@ -48,7 +48,7 @@ export default function RootLayout({ children }) {
         <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
           <RoomProvider>
             <ClientLayout>{children}</ClientLayout>
-            <ToastContainer
+            {/* <ToastContainer
               position="bottom-right"
               autoClose={5000}
               hideProgressBar={false}
@@ -58,8 +58,7 @@ export default function RootLayout({ children }) {
               pauseOnFocusLoss
               draggable
               pauseOnHover
-            />
-
+            /> */}
           </RoomProvider>
         </Providers>
       </body>

@@ -61,7 +61,7 @@ const CardComponent = ({ card }) => {
             </CardHeader>
             <CardBody>
               <div className="pt-1 pb-2">
-                <Chip radius="md">Therapist</Chip>
+                <Chip radius="md font-bold ">Therapist</Chip>
               </div>
               <h1 className="text-lg font-bold">{card.heading}</h1>
               <p className="p-2 text-small">{card.description}</p>
@@ -135,7 +135,8 @@ const Discover = () => {
   return (
     <>
       {loader ? (
-        <BlackOverlay isLoading={true} />
+        // <BlackOverlay isLoading={true} />
+        <main className="relative flex flex-col   "></main>
       ) : (
         <>
           {!user && <LoginModal />}
