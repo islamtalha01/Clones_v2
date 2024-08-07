@@ -4,8 +4,11 @@ import { PRICING } from "../lib/constants";
 import MySideBar from "../../components/MySideBar";
 import PriceCard from "../../components/PriceCard";
 import { useState, useEffect } from "react";
+import { useRoom } from "../RoomContext";
 
 const PricingPage = () => {
+  const { activePlan } = useRoom();
+
   const [value, setValue] = useState(null);
   let userCreds;
   useEffect(() => {
@@ -35,7 +38,12 @@ const PricingPage = () => {
             </p>
             <div className="flex justify-center items-center flex-wrap gap-6  ">
               {PRICING?.map((price) => (
-                <PriceCard price={price} key={price.title} userCred={value} />
+                <PriceCard
+                  price={price}
+                  key={price.title}
+                  userCred={value}
+                  isActivePlan={price.title === activePlan}
+                />
               ))}
             </div>
           </div>
