@@ -22,6 +22,10 @@ export default function InteractiveAvatarTextInput({
 
   return (
     <Input
+      style={{
+        lineHeight: "35px",
+        outline: "none",
+      }}
       classNames={{
         label: "text-black/50 dark:text-white/90",
         input: [
