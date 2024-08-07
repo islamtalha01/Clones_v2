@@ -1,5 +1,5 @@
 "use client";
-
+import { redirect } from "next/navigation";
 import React, { useEffect, useState, useRef } from "react";
 import SideBarItem from "./SideBarItem";
 import ChatItem from "./ChatItem";
@@ -24,6 +24,7 @@ const MySideBar = ({ sidebarOpen, setSidebarOpen }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
   const [planName, setPlanName] = useState("");
+  const [loggedIn, setLoggedIn] = useState(false);
   const router = useRouter();
 
   const dropdownRef = useRef(null);
@@ -31,6 +32,16 @@ const MySideBar = ({ sidebarOpen, setSidebarOpen }) => {
   const handleToggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
   };
+
+  async function handleLogout() {
+    const result = await logout();
+    if (result) {
+      setLoggedIn(false);
+      redirect("/discover");
+    } else {
+      redirect("/error");
+    }
+  }
 
   const handleClickOutside = (event) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -85,6 +96,7 @@ const MySideBar = ({ sidebarOpen, setSidebarOpen }) => {
     if (!data?.user?.id) {
       setUser(false);
     } else {
+      setLoggedIn(true);
       setUser({ ...data?.user?.user_metadata, id: data?.user?.id });
     }
     setLoading(false);
@@ -122,7 +134,12 @@ const MySideBar = ({ sidebarOpen, setSidebarOpen }) => {
               <>Loading User Info...</>
             ) : (
               <>
-                <div ref={dropdownRef} className="relative mb-36">
+                <div
+                  ref={dropdownRef}
+                  className={`relative mb-36  ${
+                    loggedIn ? "" : "hidden"
+                  } `}
+                >
                   <button
                     onClick={handleToggleDropdown}
                     className="flex items-center text-white w-full focus:outline-none"
@@ -159,7 +176,7 @@ const MySideBar = ({ sidebarOpen, setSidebarOpen }) => {
                         <form>
                           <button
                             type="submit"
-                            formAction={logout}
+                            formAction={handleLogout}
                             className="text-sm text-red-500 hover:underline"
                           >
                             Logout
