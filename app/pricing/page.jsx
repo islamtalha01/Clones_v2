@@ -18,9 +18,6 @@ const PricingPage = () => {
   return (
     <main className="relative flex flex-col  w-screen">
       <div className="flex flex-row ">
-        <div className="w-[250px]  flex flex-col">
-          <MySideBar />
-        </div>
         <div className="flex  justify-center items-center w-screen ">
           <div className="container mx-auto mt-4">
             <h3 className="sm:text-xl uppercase font-semibold text-center mb-2 sm:mb-6 text-secondary">

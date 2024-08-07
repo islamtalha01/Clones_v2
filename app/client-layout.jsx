@@ -18,9 +18,7 @@ export default function ClientLayout({ children }) {
       <ToastContainer />
       <NavBar toggleSidebar={toggleSidebar} />
       <div className="flex flex-row flex-grow">
-        <div
-          className={`hidden max-lg:flex w-[250px] ${sidebarOpen ? "" : "w-0"}`}
-        >
+        <div className={` w-[250px] flex flex-col ${sidebarOpen ? "" : "w-0"}`}>
           <MySideBar
             sidebarOpen={sidebarOpen}
             setSidebarOpen={setSidebarOpen}

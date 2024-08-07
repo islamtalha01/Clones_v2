@@ -42,10 +42,10 @@ export async function POST(request) {
     name: price.title,
     price: price,
   };
-
+  console.log("planData", planData);
   const { data: paymentData, error: paymentError } = await supabase
     .from("payments")
-    .insert([{ user_id: userId, plan_data: planData }]);
+    .upsert([{ user_id: userId, plan_data: planData }]);
 
   if (paymentError) {
     console.error("Error inserting data:", paymentError);
