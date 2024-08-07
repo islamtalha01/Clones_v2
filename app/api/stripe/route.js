@@ -44,8 +44,11 @@ export async function POST(request) {
   };
   console.log("planData", planData);
   const { data: paymentData, error: paymentError } = await supabase
-    .from("payments")
-    .upsert([{ user_id: userId, plan_data: planData }]);
+  .from("payments")
+  .upsert(
+      [{ user_id: userId, plan_data: planData }],
+      { onConflict: ['user_id'] }
+  );
 
   if (paymentError) {
     console.error("Error inserting data:", paymentError);
