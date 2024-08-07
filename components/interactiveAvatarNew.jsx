@@ -326,14 +326,14 @@ export default function InteractiveAvatar() {
                 time={time}
                 setTime={setTime}
               />
-              <Button
+              {/* <Button
                 size="md"
                 onClick={fetchSessions}
                 className="bg-gradient-to-tr from-indigo-500 to-indigo-300  text-white rounded-lg"
                 variant="shadow"
               >
                 Number of sessions
-              </Button>
+              </Button> */}
             </>
           </CardHeader>
         )}
@@ -387,6 +387,7 @@ export default function InteractiveAvatar() {
               width: "40%",
               marginLeft: "auto",
               marginRight: "auto",
+              marginTop: "-100px",
             }}
           >
             <InteractiveAvatarTextInput

@@ -16,7 +16,8 @@ const InteractiveAvatarChatMessages = ({ messages }) => {
         width: "40%",
         height: "35%",
         opacity: "0.6",
-        bottom: "35px",
+        bottom: "0",
+        marginBottom: "100px",
         overflowY: "auto",
         fontSize: "12px",
       }}
