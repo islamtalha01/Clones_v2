@@ -12,9 +12,13 @@ import {
 } from "react-icons/hi";
 import { createClient } from "../utils/supabase/client";
 import { useRouter } from "next/navigation";
-import { Button } from "@nextui-org/react";
+import { useRoom } from "../app/RoomContext";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const MySideBar = ({ sidebarOpen, setSidebarOpen }) => {
+  const { setActivePlan } = useRoom();
+
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [user, setUser] = useState(null);
   const [loader, setLoading] = useState(false);
@@ -63,11 +67,16 @@ const MySideBar = ({ sidebarOpen, setSidebarOpen }) => {
       const planData = paymentData[0].plan_data;
       if (planData && planData.name) {
         setPlanName(planData.name);
+        setActivePlan(planData.name);
       } else {
+        //show toast here
         console.error("Plan data or plan name not found");
       }
     } else {
       console.log("No payment data found for the given user ID.");
+      if (!toast.isActive("paymentErrorToast")) {
+        toast.warning("Please Add your Pricing Plan", { toastId: "paymentErrorToast" });
+      }
     }
     setUser({ ...data?.user?.user_metadata, id: data?.user?.id });
     setLoading(false);

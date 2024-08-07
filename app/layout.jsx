@@ -1,5 +1,5 @@
 // app/layout.jsx
-
+import "react-toastify/dist/ReactToastify.css";
 import "./globals.css";
 import clsx from "clsx";
 import { Fira_Code as FontMono, Inter as FontSans } from "next/font/google";
@@ -7,6 +7,7 @@ import { Providers } from "./providers";
 import ClientLayout from "./client-layout"; // Import the client layout
 
 import { RoomProvider } from "../app/RoomContext";
+import { ToastContainer } from "react-toastify";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -47,6 +48,18 @@ export default function RootLayout({ children }) {
         <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
           <RoomProvider>
             <ClientLayout>{children}</ClientLayout>
+            <ToastContainer
+              position="bottom-right"
+              autoClose={5000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+            />
+
           </RoomProvider>
         </Providers>
       </body>
