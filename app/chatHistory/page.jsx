@@ -14,7 +14,10 @@ const ChatHistory = () => {
 
   const handleDocumentClick = (e) => {
     // Close the menu if clicked outside
-    if (!e.target.closest("#menuButton") && !e.target.closest("#menuDropdown")) {
+    if (
+      !e.target.closest("#menuButton") &&
+      !e.target.closest("#menuDropdown")
+    ) {
       setMenuVisible(false);
     }
   };
@@ -47,10 +50,6 @@ const ChatHistory = () => {
       className="flex h-screen overflow-hidden"
       style={{ width: "calc(100vw - 20px)" }}
     >
-      <div className="hidden lg:flex lg:w-[250px]">
-        <MySideBar />
-      </div>
-
       <div className="flex-1">
         {/* Chat Header */}
 

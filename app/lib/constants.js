@@ -218,3 +218,33 @@ export const PRICING = [
     calls: 50,
   },
 ];
+
+export const cardsData = [
+  {
+    name: "Zoey Lang",
+    username: "@zoeylang",
+    avatar: "https://nextui.org/avatars/avatar-1.png",
+    description:
+      "Jamie Gold is an empathetic AI therapist dedicated to helping people navigate their mental health challenges with personalized support and insightful guidance. Through compassionate listening and tailored strategies, Jamie empowers individuals to achieve emotional well-being and resilience. He focuses on Trauma and Family conflict.",
+    link: "https://github.com/nextui-org/nextui",
+    heading: "Therapist AI",
+  },
+  {
+    name: "Alex Doe",
+    username: "@alexdoe",
+    avatar: "https://nextui.org/avatars/avatar-2.png",
+    description:
+      "Jamie Gold is an empathetic AI therapist dedicated to helping people navigate their mental health challenges with personalized support and insightful guidance. Through compassionate listening and tailored strategies, Jamie empowers individuals to achieve emotional well-being and resilience. He focuses on Trauma and Family conflict.",
+    link: "https://github.com/nextui-org/nextui",
+    heading: "Mentor AI",
+  },
+  {
+    name: "Jane Smith",
+    username: "@janesmith",
+    avatar: "https://nextui.org/avatars/avatar-3.png",
+    description:
+      "Jamie Gold is an empathetic AI therapist dedicated to helping people navigate their mental health challenges with personalized support and insightful guidance. Through compassionate listening and tailored strategies, Jamie empowers individuals to achieve emotional well-being and resilience. He focuses on Trauma and Family conflict.",
+    link: "https://github.com/nextui-org/nextui",
+    heading: "Friend AI",
+  },
+];
