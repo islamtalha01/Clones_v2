@@ -111,13 +111,13 @@ const MySideBar = ({ sidebarOpen, setSidebarOpen }) => {
       {sidebarOpen && (
         <div
           onClick={() => setSidebarOpen(false)}
-          className="fixed inset-0 z-20 transition-opacity bg-black opacity-50 lg:hidden"
+          className="fixed h-[100%] inset-0 z-20 transition-opacity bg-black opacity-50 lg:hidden"
         ></div>
       )}
 
       <div
-        style={{ minHeight: "calc(100vh - 85px)" }}
-        className={`fixed p-4 inset-y-0 left-0 z-30 w-[250px] border border-[#292932] overflow-y-auto transition duration-300 transform bg-[#1C1C24] lg:translate-x-0 lg:static lg:inset-0 ${
+        // style={{ minHeight: "calc(100vh - 85px)" }}
+        className={`fixed h-[100%] p-4 inset-y-0 left-0 z-30 w-[250px] border border-[#292932] overflow-y-auto transition duration-300 transform bg-[#1C1C24] lg:translate-x-0 lg:static lg:inset-0 ${
           sidebarOpen ? "translate-x-0 ease-out" : "-translate-x-full ease-in"
         }`}
       >

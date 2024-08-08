@@ -48,7 +48,7 @@ export default function NavBar({ toggleSidebar }) {
     <Navbar
       fluid="true"
       rounded="true"
-      className="bg-[#1C1C24] h-[80px] border-b border-[#292932] w-full flex justify-between items-center px-4"
+      className="bg-[#1C1C24]  h-[80px] border-b border-[#292932] w-full flex justify-between items-center px-4"
     >
       {/* Ensure router pathname check is within component scope */}
       {pathname !== "/" && pathname !== "/login" && (
