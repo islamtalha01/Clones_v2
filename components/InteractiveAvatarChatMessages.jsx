@@ -59,4 +59,4 @@ const InteractiveAvatarChatMessages = ({ messages }) => {
   );
 };
 
-export default InteractiveAvatarChatMessages;
+export default React.memo(InteractiveAvatarChatMessages);
