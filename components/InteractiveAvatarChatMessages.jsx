@@ -13,8 +13,8 @@ const InteractiveAvatarChatMessages = ({ messages }) => {
     <div
       style={{
         position: "absolute",
-        width: "40%",
-        height: "35%",
+        width: "30%",
+        height: "25%",
         opacity: "0.6",
         bottom: "0",
         marginBottom: "100px",

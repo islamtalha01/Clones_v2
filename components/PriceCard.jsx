@@ -1,6 +1,6 @@
 import React from "react";
 
-const PriceCard = ({ price, userCred }) => {
+const PriceCard = ({ price, userCred, isActivePlan }) => {
   function onPricingPlaneSelect() {
     fetch(`/api/stripe/`, {
       method: "POST",
@@ -12,7 +12,11 @@ const PriceCard = ({ price, userCred }) => {
       });
   }
   return (
-    <div className="w-full max-w-xs p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-8 dark:bg-gray-800 dark:border-gray-700">
+    <div
+      className={`w-full max-w-xs p-4 bg-white border-2 ${
+        isActivePlan ? "border-blue-700" : ""
+      } rounded-lg shadow sm:p-8 dark:bg-gray-800 `}
+    >
       <h5 className="mb-4 text-xl font-medium text-gray-500 dark:text-gray-400">
         {price.title}
       </h5>
@@ -42,9 +46,16 @@ const PriceCard = ({ price, userCred }) => {
         </li>
       </ul>
       <button
-        onClick={() => onPricingPlaneSelect(price)}
+      disabled={isActivePlan}
+        onClick={() => {
+          if (!isActivePlan) {
+            onPricingPlaneSelect(price);
+          }else{
+
+          }
+        }}
         type="button"
-        className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-200 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-900 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex justify-center w-full text-center"
+        className="text-white disabled:bg-red-500 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-200 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-900 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex justify-center w-full text-center"
       >
         Choose plan
       </button>
