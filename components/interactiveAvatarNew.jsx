@@ -1,3 +1,5 @@
+/** @format */
+
 import {
   Configuration,
   NewSessionData,
@@ -25,6 +27,7 @@ import OpenAI from "openai";
 import { useEffect, useRef, useState } from "react";
 import InteractiveAvatarTextInput from "./InteractiveAvatarTextInput";
 import Timer from "./Timer";
+import { useCallback } from "react";
 import { AVATARS, VOICES } from "../app/lib/constants";
 
 const openai = new OpenAI({
@@ -55,6 +58,8 @@ export default function InteractiveAvatar() {
   const [timerStarted, setTimerStarted] = useState(true);
 
   const [chatId, setChatId] = useState(undefined);
+  const [avatarStartedSpeaking, setAvatarStartedSpeaking] = useState(false);
+
   const {
     input,
     setInput,
@@ -64,18 +69,19 @@ export default function InteractiveAvatar() {
   } = useChat({
     id: chatId?.toString(),
     onFinish: async (message) => {
-      // this is a stream, it can also be used to show chat history in real-time chat history
-      console.log("ChatGPT Response:", message);
-
       if (!initialized || !avatar.current) {
         setDebug("Avatar API not initialized");
         return;
       }
 
-      //send the ChatGPT response to the Interactive Avatar
+      setAvatarStartedSpeaking(false);
+
       await avatar.current
         .speak({
           taskRequest: { text: message.content, sessionId: data?.sessionId },
+        })
+        .then(() => {
+          setAvatarStartedSpeaking(true); // Set state to true when avatar starts speaking
         })
         .catch((e) => {
           setDebug(e.message);
@@ -90,27 +96,28 @@ export default function InteractiveAvatar() {
       },
     ],
   });
-  const currentAvatarName = "josh_lite3_20230714";
-  const avatarImage = publicAvatarsJson.data.avatar.find(
-    (av) => av.pose_id === currentAvatarName
-  ).normal_preview;
-  console.log(avatarImage);
 
-  async function fetchAccessToken() {
+  const avatarFound = publicAvatarsJson.data.avatar.find(
+    (av) => av.pose_id === avatarId
+  );
+
+  const avatarImage = avatarFound ? avatarFound.normal_preview : "";
+
+  const fetchAccessToken = useCallback(async () => {
     try {
       const response = await fetch("/api/get-access-token", {
         method: "POST",
       });
       const token = await response.text();
-      console.log("Access Token:", token); // Log the token to verify
       return token;
     } catch (error) {
       console.error("Error fetching access token:", error);
       return "";
     }
-  }
+  }, []);
 
-  async function startSession() {
+  console.log({ avatarIdOut: avatarId, voiceIdOut: voiceId });
+  const startSession = useCallback(async () => {
     setIsLoadingSession(true);
     setLoader(true);
     await updateToken();
@@ -143,11 +150,10 @@ export default function InteractiveAvatar() {
     setLoader(false);
 
     setIsLoadingSession(false);
-  }
+  }, [voiceId, avatarId]);
 
-  async function updateToken() {
+  const updateToken = useCallback(async () => {
     const newToken = await fetchAccessToken();
-    console.log("Updating Access Token:", newToken); // Log token for debugging
     avatar.current = new StreamingAvatarApi(
       new Configuration({ accessToken: newToken })
     );
@@ -160,14 +166,13 @@ export default function InteractiveAvatar() {
       console.log("Avatar stopped talking", e);
     };
 
-    console.log("Adding event handlers:", avatar.current);
     avatar.current.addEventHandler("avatar_start_talking", startTalkCallback);
     avatar.current.addEventHandler("avatar_stop_talking", stopTalkCallback);
 
     setInitialized(true);
-  }
+  }, [fetchAccessToken]);
 
-  async function handleInterrupt() {
+  const handleInterrupt = useCallback(async () => {
     if (!initialized || !avatar.current) {
       setDebug("Avatar API not initialized");
       return;
@@ -177,44 +182,116 @@ export default function InteractiveAvatar() {
       .catch((e) => {
         setDebug(e.message);
       });
-  }
+  }, [initialized, data]);
 
-  async function endSession() {
+  const endSession = useCallback(async () => {
     if (!initialized || !avatar.current) {
       setDebug("Avatar API not initialized");
       return;
     }
-    console.log("Ending session");
     await avatar.current.stopAvatar(
       { stopSessionRequest: { sessionId: data?.sessionId } },
       (response) => {
-        console.log("Enfinishing avatar session", response);
         setDebug(response);
         setChatId((chatId) => (chatId ?? 0) + 1);
         stopOpenAISession();
       }
     );
+    setLoader(true);
     setChatId((chatId) => (chatId ?? 0) + 1);
     setStream(undefined);
     setHeader(false);
     setData(undefined);
-    // setTimerStarted(false);
-    // setTime(0);
-  }
+  }, [initialized, data, stopOpenAISession]);
 
-  // async function handleSpeak() {
-  //   setIsLoadingRepeat(true);
-  //   if (!initialized || !avatar.current) {
-  //     setDebug("Avatar API not initialized");
-  //     return;
-  //   }
-  //   await avatar.current
-  //     .speak({ taskRequest: { text: text, sessionId: data?.sessionId } })
-  //     .catch((e) => {
-  //       setDebug(e.message);
-  //     });
-  //   setIsLoadingRepeat(false);
-  // }
+  const handleSpeak = useCallback(async () => {
+    setIsLoadingRepeat(true);
+    if (!initialized || !avatar.current) {
+      setDebug("Avatar API not initialized");
+      return;
+    }
+    await avatar.current
+      .speak({ taskRequest: { text: text, sessionId: data?.sessionId } })
+      .catch((e) => {
+        setDebug(e.message);
+      });
+    setIsLoadingRepeat(false);
+  }, [initialized, text, data]);
+
+  const startRecording = useCallback(() => {
+    navigator.mediaDevices
+      .getUserMedia({ audio: true })
+      .then((stream) => {
+        mediaRecorder.current = new MediaRecorder(stream);
+        mediaRecorder.current.ondataavailable = (event) => {
+          audioChunks.current.push(event.data);
+        };
+        mediaRecorder.current.onstop = () => {
+          const audioBlob = new Blob(audioChunks.current, {
+            type: "audio/wav",
+          });
+          audioChunks.current = [];
+          transcribeAudio(audioBlob);
+        };
+        mediaRecorder.current.start();
+        setRecording(true);
+      })
+      .catch((error) => {
+        console.error("Error accessing microphone:", error);
+      });
+  }, []);
+
+  const stopRecording = useCallback(() => {
+    if (mediaRecorder.current) {
+      mediaRecorder.current.stop();
+      setRecording(false);
+    }
+  }, []);
+
+  const transcribeAudio = useCallback(
+    async (audioBlob) => {
+      try {
+        const audioFile = new File([audioBlob], "recording.wav", {
+          type: "audio/wav",
+        });
+        const response = await openai.audio.transcriptions.create({
+          model: "whisper-1",
+          file: audioFile,
+        });
+        const transcription = response.text;
+        setInput(transcription);
+      } catch (error) {
+        console.error("Error transcribing audio:", error);
+      }
+    },
+    [setInput]
+  );
+
+  const fetchSessions = useCallback(async () => {
+    const options = {
+      method: "GET",
+      headers: {
+        accept: "application/json",
+        "x-api-key":
+          "OWQwNGQ5M2M2YmRkNDcxMWI5ZTE5ZjFlYWM1Y2ExMWUtMTcyMjgzMTM1Nw==",
+      },
+    };
+
+    try {
+      const response = await fetch(
+        "https://api.heygen.com/v1/streaming.list",
+        options
+      );
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      console.log("Session of the player", data.sessions);
+      alert(`Connected Session: ${data?.sessions?.length}`);
+    } catch (error) {
+      console.error("Error fetching sessions:", error);
+    }
+  }, []);
 
   useEffect(() => {
     async function init() {
@@ -240,76 +317,7 @@ export default function InteractiveAvatar() {
         setDebug("Playing");
       };
     }
-  }, [mediaStream, stream]);
-
-  function startRecording() {
-    navigator.mediaDevices
-      .getUserMedia({ audio: true })
-      .then((stream) => {
-        mediaRecorder.current = new MediaRecorder(stream);
-        mediaRecorder.current.ondataavailable = (event) => {
-          audioChunks.current.push(event.data);
-        };
-        mediaRecorder.current.onstop = () => {
-          const audioBlob = new Blob(audioChunks.current, {
-            type: "audio/wav",
-          });
-          audioChunks.current = [];
-          transcribeAudio(audioBlob);
-        };
-        mediaRecorder.current.start();
-        setRecording(true);
-      })
-      .catch((error) => {
-        console.error("Error accessing microphone:", error);
-      });
-  }
-
-  function stopRecording() {
-    if (mediaRecorder.current) {
-      mediaRecorder.current.stop();
-      setRecording(false);
-    }
-  }
-
-  async function transcribeAudio(audioBlob) {
-    try {
-      // Convert Blob to File
-      const audioFile = new File([audioBlob], "recording.wav", {
-        type: "audio/wav",
-      });
-      const response = await openai.audio.transcriptions.create({
-        model: "whisper-1",
-        file: audioFile,
-      });
-      const transcription = response.text;
-      console.log("Transcription: ", transcription);
-      setInput(transcription);
-    } catch (error) {
-      console.error("Error transcribing audio:", error);
-    }
-  }
-
-  const fetchSessions = async () => {
-    const options = {
-      method: "GET",
-      headers: {
-        accept: "application/json",
-        "x-api-key":
-          "OWQwNGQ5M2M2YmRkNDcxMWI5ZTE5ZjFlYWM1Y2ExMWUtMTcyMjgzMTM1Nw==",
-      },
-    };
-
-    fetch("https://api.heygen.com/v1/streaming.list", options)
-      .then((response) => response.json())
-      .then((response) => {
-        // setSessions(response);
-        // alert(${response.data});
-        console.log("sesison of the player", response.data.sessions);
-        alert(`Connected Session: ${response?.data?.sessions?.length}`);
-      })
-      .catch((err) => console.error(err));
-  };
+  }, [stream]);
 
   useEffect(() => {
     let minsToStop = 5;
@@ -318,7 +326,7 @@ export default function InteractiveAvatar() {
       setTimerStarted(false);
       endSession();
     }
-  }, [time]);
+  }, [time, endSession]);
 
   return (
     <div className="w-full flex  flex-col gap-4">
@@ -413,7 +421,9 @@ export default function InteractiveAvatar() {
               >
                 <track kind="captions" />
               </video>
-              <InteractiveAvatarChatMessages messages={messages} />
+              {avatarStartedSpeaking ? (
+                <InteractiveAvatarChatMessages messages={messages} />
+              ) : null}
             </div>
           ) : !isLoadingSession ? (
             <div
