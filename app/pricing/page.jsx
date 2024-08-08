@@ -57,8 +57,8 @@ const PricingPage = () => {
     and services that can scale as a business grows
   </p>
   <div className="flex flex-wrap justify-center items-center gap-6">
-    {PRICING?.map((price) => (
-      <div className="flex-1 min-w-[250px] max-w-[300px]">
+    {PRICING?.map((price,index) => (
+      <div key={index} className="flex-1 min-w-[250px] max-w-[300px]">
         <PriceCard
           price={price}
           key={price.title}
