@@ -2,15 +2,12 @@
 import { useState, useEffect } from "react";
 import { createClient } from "../../utils/supabase/client";
 const supabase = createClient();
-import MySideBar from "../../components/MySideBar";
 
 const ChatHistory = () => {
+  const [userCreds, setUserCreds] = useState(null);
+
   const [menuVisible, setMenuVisible] = useState(false);
   const [messages, setMessages] = useState([]);
-
-  const toggleMenu = () => {
-    setMenuVisible(!menuVisible);
-  };
 
   const handleDocumentClick = (e) => {
     // Close the menu if clicked outside
@@ -29,14 +26,33 @@ const ChatHistory = () => {
     };
   }, []);
 
+  // useEffect(() => {
+  //   // Check if the code is running in the browser (client-side)
+
+  //   // Retrieve user credentials from localStorage
+  //   const creds = localStorage.getItem("userCreds");
+  //   console.log("User credentials", creds);
+  //   if (creds) {
+  //     setUserCreds(JSON.parse(creds)); // Parse the JSON string if necessary
+  //   }
+  // }, []);
+
   useEffect(() => {
     const fetchMessages = async () => {
-      const { data, error } = await supabase.from("chats").select("*");
+      const creds = localStorage.getItem("usercreds");
+      console.log("User credentials", creds);
+      // const { data, error } = await supabase.from("chats").select("*");
+
+      const { data, error } = await supabase
+        .from("chats")
+        .select("*")
+        .eq("user_id", creds);
 
       if (error) {
         console.error("Error fetching messages:", error);
       } else {
         if (data) {
+          console.log("Messages:", data);
           setMessages(data);
         }
       }

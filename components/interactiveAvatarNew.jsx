@@ -321,7 +321,7 @@ export default function InteractiveAvatar() {
   }, [time]);
 
   return (
-    <div className="w-full flex flex-col gap-4">
+    <div className="w-full flex  flex-col gap-4">
       <Card>
         {header > 0 && (
           <CardHeader className="flex justify-between items-center">
@@ -357,11 +357,7 @@ export default function InteractiveAvatar() {
                 <p className="text-sm font-medium leading-none">
                   Custom Avatar ID (optional)
                 </p>
-                {/* <Input
-                  value={avatarId}
-                  onChange={(e) => setAvatarId(e.target.value)}
-                  placeholder="Enter a custom avatar ID"
-                /> */}
+
                 <Select
                   placeholder="Or select one from these example avatars"
                   size="md"
@@ -538,14 +534,6 @@ export default function InteractiveAvatar() {
             />
           </CardFooter>
         )}
-        {/* <Button
-          size="md"
-          onClick={endSession}
-          className="bg-gradient-to-tr from-indigo-500 to-indigo-300  text-white rounded-lg"
-          variant="shadow"
-        >
-          End session
-        </Button> */}
       </Card>
     </div>
   );

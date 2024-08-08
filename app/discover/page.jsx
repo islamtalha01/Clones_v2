@@ -17,10 +17,6 @@ import { useRoom } from "../RoomContext";
 import { cardsData } from "../lib/constants";
 import "./page.css";
 
-// import BlackSkeletonLoader from "../../components/BlackSkeletonLoader";
-
-import BlackOverlay from "../../components/BlackOverlay";
-
 const CardComponent = ({ card }) => {
   const { isRoomFull, setIsRoomFull } = useRoom();
 
