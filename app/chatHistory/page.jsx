@@ -26,27 +26,16 @@ const ChatHistory = () => {
     };
   }, []);
 
-  // useEffect(() => {
-  //   // Check if the code is running in the browser (client-side)
-
-  //   // Retrieve user credentials from localStorage
-  //   const creds = localStorage.getItem("userCreds");
-  //   console.log("User credentials", creds);
-  //   if (creds) {
-  //     setUserCreds(JSON.parse(creds)); // Parse the JSON string if necessary
-  //   }
-  // }, []);
-
   useEffect(() => {
     const fetchMessages = async () => {
       const creds = localStorage.getItem("usercreds");
       console.log("User credentials", creds);
-      // const { data, error } = await supabase.from("chats").select("*");
+      const { data, error } = await supabase.from("chats").select("*");
 
-      const { data, error } = await supabase
-        .from("chats")
-        .select("*")
-        .eq("user_id", creds);
+      // const { data, error } = await supabase
+      //   .from("chats")
+      //   .select("*")
+      //   .eq("user_id", creds);
 
       if (error) {
         console.error("Error fetching messages:", error);
@@ -62,61 +51,116 @@ const ChatHistory = () => {
   }, []);
 
   return (
-    <div
-      className="flex   overflow-hidden"
-      
-    >
-      <div className="flex  ">
-        {/* Chat Header */}
+  //   <div className="flex h-screen overflow-hidden">
+  //   <div className="flex-1 flex flex-col">
+  //     {/* Chat Header */}
+   
+  
+  //     {/* Chat Messages */}
+  //     <div
+  //       className="flex-1 overflow-y-auto p-4 pb-12 "
+  //       style={{ scrollbarWidth: "none" }}
+  //     >
+  //       {messages
+  //         ?.slice()
+  //         .reverse() // Reverse the order of chat objects
+  //         .map((chatObj, chatIndex) =>
+  //           chatObj.messages
+  //             .slice()
+  //             .reverse() // Reverse the order of messages within each chat
+  //             .map((msg, msgIndex) => (
+  //               <div key={`${chatIndex}-${msgIndex}`}>
+  //                 {msg.role === "user" && (
+  //                   <div className="flex justify-end mb-4 cursor-pointer">
+  //                     <div className="flex max-w-96 bg-indigo-500 text-white rounded-lg p-3 gap-3">
+  //                       <p>{msg.content}</p>
+  //                     </div>
+  //                     <div className="w-9 h-9 rounded-full flex items-center justify-center ml-2 bg-blue-300">
+  //                       <img
+  //                         src="/user_avatar.svg"
+  //                         alt="My Avatar"
+  //                         className="w-8 h-8 rounded-full"
+  //                       />
+  //                     </div>
+  //                   </div>
+  //                 )}
+  //                 {msg.role === "system" && (
+  //                   <div className="flex mb-4 cursor-pointer">
+  //                     <div className="w-9 h-9 rounded-full flex items-center justify-center mr-2 bg-blue-300">
+  //                       <img
+  //                         src="/openai.svg"
+  //                         alt="User Avatar"
+  //                         className="w-8 h-8 rounded-full"
+  //                       />
+  //                     </div>
+  //                     <div className="flex max-w-96 bg-white rounded-lg p-3 gap-3">
+  //                       <p className="text-gray-700">{msg.content}</p>
+  //                     </div>
+  //                   </div>
+  //                 )}
+  //               </div>
+  //             ))
+  //         )}
+  //     </div>
+  //   </div>
+  // </div>
+  <div className="flex h-screen overflow-hidden">
+  <div className="flex-1 flex flex-col">
+    {/* Chat Header */}
+ 
 
-        {/* Chat Messages */}
-        <div
-          className=" overflow-y-auto p-4 pb-36"
-          style={{ scrollbarWidth: "none" }}
-        >
-          {messages
-            ?.slice()
-            .reverse() // Reverse the order of chat objects
-            .map((chatObj, chatIndex) =>
-              chatObj.messages
-                .slice()
-                .reverse() // Reverse the order of messages within each chat
-                .map((msg, msgIndex) => (
-                  <div key={`${chatIndex}-${msgIndex}`}>
-                    {msg.role === "user" && (
-                      <div className="flex justify-end mb-4 cursor-pointer">
-                        <div className="flex max-w-96 bg-indigo-500 text-white rounded-lg p-3 gap-3">
-                          <p>{msg.content}</p>
-                        </div>
-                        <div className="w-9 h-9 rounded-full flex items-center justify-center ml-2 bg-blue-300">
-                          <img
-                            src="/user_avatar.svg"
-                            alt="My Avatar"
-                            className="w-8 h-8 rounded-full"
-                          />
-                        </div>
-                      </div>
-                    )}
-                    {msg.role === "system" && (
-                      <div className="flex mb-4 cursor-pointer">
-                        <div className="w-9 h-9 rounded-full flex items-center justify-center mr-2 bg-blue-300">
-                          <img
-                            src="/openai.svg"
-                            alt="User Avatar"
-                            className="w-8 h-8 rounded-full"
-                          />
-                        </div>
-                        <div className="flex max-w-96 bg-white rounded-lg p-3 gap-3">
-                          <p className="text-gray-700">{msg.content}</p>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                ))
-            )}
+    {/* Chat Messages or No Chat Message */}
+    <div className="flex-1 overflow-y-auto p-4 pb-36" style={{ scrollbarWidth: "none" }}>
+      {messages.length === 0 ? (
+        <div className="flex justify-center items-center h-full">
+          <h1 className="text-2xl text-center">No Chat Messages</h1>
         </div>
-      </div>
+      ) : (
+        messages
+          ?.slice()
+          .reverse() // Reverse the order of chat objects
+          .map((chatObj, chatIndex) =>
+            chatObj.messages
+              .slice()
+              .reverse() // Reverse the order of messages within each chat
+              .map((msg, msgIndex) => (
+                <div key={`${chatIndex}-${msgIndex}`}>
+                  {msg.role === "user" && (
+                    <div className="flex justify-end mb-4 cursor-pointer">
+                      <div className="flex max-w-96 bg-indigo-500 text-white rounded-lg p-3 gap-3">
+                        <p>{msg.content}</p>
+                      </div>
+                      <div className="w-9 h-9 rounded-full flex items-center justify-center ml-2 bg-blue-300">
+                        <img
+                          src="/user_avatar.svg"
+                          alt="My Avatar"
+                          className="w-8 h-8 rounded-full"
+                        />
+                      </div>
+                    </div>
+                  )}
+                  {msg.role === "system" && (
+                    <div className="flex mb-4 cursor-pointer">
+                      <div className="w-9 h-9 rounded-full flex items-center justify-center mr-2 bg-blue-300">
+                        <img
+                          src="/openai.svg"
+                          alt="User Avatar"
+                          className="w-8 h-8 rounded-full"
+                        />
+                      </div>
+                      <div className="flex max-w-96 bg-white rounded-lg p-3 gap-3">
+                        <p className="text-gray-700">{msg.content}</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))
+          )
+      )}
     </div>
+  </div>
+</div>
+
   );
 };
 
