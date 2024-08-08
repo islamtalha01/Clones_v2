@@ -63,15 +63,15 @@ const ChatHistory = () => {
 
   return (
     <div
-      className="flex h-screen  overflow-hidden"
-      style={{ width: "calc(100vw - 20px)" }}
+      className="flex   overflow-hidden"
+      
     >
       <div className="flex  ">
         {/* Chat Header */}
 
         {/* Chat Messages */}
         <div
-          className="h-screen overflow-y-auto p-4 pb-36"
+          className=" overflow-y-auto p-4 pb-36"
           style={{ scrollbarWidth: "none" }}
         >
           {messages

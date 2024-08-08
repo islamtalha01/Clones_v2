@@ -19,10 +19,10 @@ const PricingPage = () => {
   }, []);
 
   return (
-    <main className="relative flex flex-col  w-screen">
+    <main className="relative flex flex-col ">
       <div className="flex flex-row ">
-        <div className="flex  justify-center items-center w-screen ">
-          <div className="container mx-auto mt-4">
+        <div className="flex  justify-center items-center  ">
+          {/* <div className="container mx-auto mt-4">
             <h3 className="sm:text-xl uppercase font-semibold text-center mb-2 sm:mb-6 text-secondary">
               Pricing Plan
             </h3>
@@ -33,7 +33,7 @@ const PricingPage = () => {
               Provide flexibility and affordability while also offering features
               and services that can scale as a business grows
             </p>
-            <div className="flex justify-center items-center flex-wrap gap-6  ">
+            <div className="flex flex-row justify-center items-center  gap-6  ">
               {PRICING?.map((price) => (
                 <PriceCard
                   price={price}
@@ -43,7 +43,33 @@ const PricingPage = () => {
                 />
               ))}
             </div>
-          </div>
+          </div> */}
+
+<div className="container mx-auto mt-4">
+  <h3 className="sm:text-xl uppercase font-semibold text-center mb-2 sm:mb-6 text-secondary">
+    Pricing Plan
+  </h3>
+  <h2 className="text-[22px] sm:text-[32px] leading-[120%] md:text-[40px] max-w-[450px] mx-auto capitalize font-helveticaBold font-bold text-center text-white mb-8">
+    Pricing built for businesses of all sizes
+  </h2>
+  <p className="text-sm sm:text-base capitalize text-stonecairn max-w-[500px] text-center mx-auto mb-16">
+    Provide flexibility and affordability while also offering features
+    and services that can scale as a business grows
+  </p>
+  <div className="flex flex-wrap justify-center items-center gap-6">
+    {PRICING?.map((price) => (
+      <div className="flex-1 min-w-[250px] max-w-[300px]">
+        <PriceCard
+          price={price}
+          key={price.title}
+          userCred={value}
+          isActivePlan={price.title === activePlan}
+        />
+      </div>
+    ))}
+  </div>
+</div>
+
         </div>
       </div>
     </main>
